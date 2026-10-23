@@ -1,64 +1,70 @@
 # Fluent for Cursor
 
-A Cursor plugin that connects the [Fluent](https://becomefluent.io/) MCP server so agents can query your conversation history, recordings, relationships, and commitments.
+Your meetings and work conversations in Cursor.
 
-This is a thin wrapper around Fluent's existing remote MCP. It does not ship a local server, API keys, or secrets. Auth is OAuth 2.1 — Cursor's connect card handles sign-in.
+[Fluent](https://becomefluent.io/) records the conversations that happen away from your laptop (in-person meetings, 1:1s, hallway conversations) on your iPhone or a supported pendant, and turns them into meeting notes, tasks, follow-ups and profiles of the people you work with. This plugin connects Cursor's agent to that context through Fluent's hosted MCP server, so you can ask what was decided, what you owe whom, or who someone is without leaving the editor.
 
-- **Plugin name:** `fluent`
-- **Author:** Feral Intelligence
-- **Homepage:** https://becomefluent.io/mcp/
-- **Repository:** https://github.com/Feral-Intelligence/fluent-cursor-plugin
-- **MCP server:** `https://mcp.becomefluent.io` (streamable HTTP at `/mcp`)
+## Setup
 
-## What you get
+1. Install **Fluent** from the Cursor Marketplace.
+2. The first time the agent uses a Fluent tool, Cursor opens Fluent's sign-in. Sign in with your Fluent account and approve access (OAuth 2.1). There are no API keys to paste.
 
-After you install the plugin and complete OAuth, Cursor can:
+You need a Fluent account with recorded conversations. Accounts are created in the Fluent iPhone app: [becomefluent.io](https://becomefluent.io/).
 
-- Search and list recordings / conversation memories
-- Pull meeting notes and full transcripts
-- Look up people and relationship context
-- Surface tasks, commitments, follow-ups, goals, and the daily briefing
+## What's included
 
-The included `fluent` skill tells the agent when to use those tools (today's recordings, meeting prep, conversation history).
+### MCP server
 
-## Install from this repo
+`fluent` → `https://mcp.becomefluent.io` (streamable HTTP, OAuth 2.1 with dynamic client registration).
 
-Marketplace listing is a later step. Until then, load the plugin from a local checkout:
+**Read tools**
+
+- `search_conversations`: search conversations by what was said, titles and participants
+- `list_memories`, `get_memory`: browse conversations by date or person, and open one
+- `get_meeting_notes`: summary, decisions and action items for a meeting
+- `list_people`, `get_person_context`: the people you work with and your recent interactions
+- `get_my_day`, `get_daily_briefing`: your plan, open commitments both ways, and recent meeting briefs
+- `list_tasks`, `get_recent_commitments`, `list_follow_ups`, `list_goals`
+- `list_workspaces`, `list_team_folders`, `list_team_notes`, `get_team_note`: notes teammates shared with your team
+
+**Write tools**
+
+- `create_task`, `complete_task`
+- `create_person`, `update_person_notes` (replaces the existing notes)
+- `set_day_plan` (replaces that day's plan; version-checked so it never overwrites a newer one)
+
+Fluent has no delete tool. The server also offers prompts: `prepare_for_meeting`, `draft_follow_up`, `weekly_review`, `visit_report`, `open_loops` and `decisions_since`.
+
+### Skill
+
+**fluent**: tells the agent when meeting context is relevant and which tool to use.
+
+## Try it
+
+- "What did we decide in the last team standup?"
+- "Prep me for my 1:1 with Jordan tomorrow."
+- "What did I commit to this week that's still open?"
+- "Add a task: send Sarah the API spec by Friday."
+
+## Privacy and data
+
+The agent sees only your own Fluent account's data (and notes teammates shared with you), the same data you see in the app. Calls run with your own token against Fluent's API. To disconnect, remove Fluent in Cursor's MCP settings.
+
+- Privacy policy: https://becomefluent.io/privacy/
+- Terms: https://becomefluent.io/terms/
+- Docs: https://becomefluent.io/help/mcp-server-setup/
+- Support: support@becomefluent.io
+
+## Develop locally
 
 ```bash
 git clone https://github.com/Feral-Intelligence/fluent-cursor-plugin.git
-cd fluent-cursor-plugin
 mkdir -p ~/.cursor/plugins/local
-ln -s "$(pwd)" ~/.cursor/plugins/local/fluent
+cp -R fluent-cursor-plugin ~/.cursor/plugins/local/fluent
 ```
 
-Reload Cursor. Open **Customize** and enable the Fluent MCP server if it is not already on. When the connect card appears, sign in with your Fluent account (OAuth 2.1). There are no API tokens to paste.
+Reload Cursor (Developer: Reload Window) and open **Customize** to check the `fluent` MCP server and skill.
 
-You need a Fluent account and captured conversations for the tools to return data. Get started at [becomefluent.io](https://becomefluent.io/).
+## License
 
-## Auth
-
-Fluent uses OAuth 2.1 with dynamic client registration. This plugin does not declare API-token variables and does not put credentials in the repo.
-
-If tools fail with an auth error, reconnect from the MCP connect card. Do not add bearer tokens to `mcp.json`.
-
-## Layout
-
-```
-.cursor-plugin/plugin.json   # Cursor plugin manifest
-mcp.json                     # Remote MCP server (OAuth via host)
-skills/fluent/SKILL.md       # When to query Fluent
-assets/logo.png              # Fluent app icon
-assets/logo.svg              # Fluent mark from becomefluent.io
-```
-
-## Marketplace submit (later)
-
-This plugin is **not** submitted yet. When you are ready:
-
-1. Confirm `"repository"` in `.cursor-plugin/plugin.json` is this public GitHub URL.
-2. Install from the local path above, complete OAuth, and run a real query (for example "what did I record today?").
-3. Confirm the plugin name `fluent` is still unused on the marketplace.
-4. Submit the public repo at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
-
-See the [Cursor plugins reference](https://cursor.com/docs/reference/plugins) for the current checklist. Do not put secrets in the repo.
+MIT
