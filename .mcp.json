@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "fluent": {
+      "url": "https://mcp.becomefluent.io"
+    }
+  }
+}

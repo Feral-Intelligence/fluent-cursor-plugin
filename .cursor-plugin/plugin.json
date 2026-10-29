@@ -1,25 +1,19 @@
 {
   "name": "fluent",
   "displayName": "Fluent",
-  "version": "0.1.0",
-  "description": "Query Fluent conversation history, recordings, relationships, and commitments from Cursor. Thin wrapper around Fluent's remote MCP server.",
+  "version": "1.0.0",
+  "description": "Your meetings and work conversations in Cursor. Ask what was decided, what you owe whom, and who someone is, from the notes, transcripts, tasks and people in your Fluent account.",
   "author": {
-    "name": "Feral Intelligence"
+    "name": "Feral Intelligence LLC",
+    "email": "listings@becomefluent.io"
   },
-  "homepage": "https://becomefluent.io/mcp/",
+  "homepage": "https://becomefluent.io/ai/?utm_source=cursor_marketplace&utm_medium=directory&utm_campaign=mcp_directory",
   "repository": "https://github.com/Feral-Intelligence/fluent-cursor-plugin",
   "license": "MIT",
-  "keywords": [
-    "fluent",
-    "mcp",
-    "conversations",
-    "recordings",
-    "meetings",
-    "memory",
-    "commitments",
-    "oauth"
-  ],
   "logo": "assets/logo.png",
+  "category": "productivity",
+  "keywords": ["fluent", "meetings", "meeting-notes", "decisions", "tasks", "follow-ups", "people", "mcp"],
+  "tags": ["meetings", "productivity", "mcp"],
   "skills": "./skills/",
-  "mcpServers": "./mcp.json"
+  "mcpServers": "./.mcp.json"
 }
