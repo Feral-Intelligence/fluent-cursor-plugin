@@ -1,34 +1,24 @@
 ---
 name: fluent
-description: Query Fluent conversation history, recordings, meetings, people, and commitments through the connected Fluent MCP server. Use when the user asks about today's recordings, recent meetings, what someone said, relationship context, follow-ups, or anything that happened in a real conversation.
+description: Look up the user's meetings and work conversations in Fluent. Use when the user asks what was discussed or decided in a meeting, what they or someone else committed to, who a person is before a meeting, what is on their plate today, or ties the current task to something agreed in a conversation. Do not use for routine coding, git or workspace questions that have no meeting or conversation reference.
 ---
 
 # Fluent
 
-Fluent is conversational memory for AI assistants. Use the Fluent MCP tools whenever the answer lives in the user's recordings, meetings, people, or commitments — not in the current repo.
+Fluent records the user's in-person meetings, 1:1s and calls and turns them into notes, tasks, follow-ups and profiles of the people they work with. Use the Fluent MCP tools when the answer lives in those conversations, not in the repo.
 
-Do not invent conversation details. If Fluent is disconnected, tell the user to complete the OAuth connect card. There are no API keys.
+Never invent conversation details. If the Fluent tools are not connected, tell the user to connect Fluent from Cursor's MCP settings and sign in with their Fluent account. There are no API keys.
 
-## When to use
+## Which tool
 
-- Today's recordings, yesterday's calls, or "what happened in my last meeting"
-- Meeting prep: who is this person, what did we last talk about, what did I promise
-- Conversation search: keywords, participants, or a specific discussion
-- Relationship context: people in the user's network, notes, recent interactions
-- Commitments, tasks, follow-ups, and the daily briefing
+- **What was said or decided:** `search_conversations` (searches transcripts, note summaries, titles and participant names), then `get_meeting_notes` for summary, decisions and action items, or `get_memory` for the full conversation.
+- **Recent or by date:** `list_memories` (newest first, filter by date range or person, paged with a cursor).
+- **A person:** `list_people`, then `get_person_context` for their profile and recent interactions.
+- **What's on my plate:** `get_my_day` for the whole day; `get_daily_briefing`, `list_tasks`, `get_recent_commitments`, `list_follow_ups` and `list_goals` for one slice.
+- **Team notes:** `list_workspaces`, `list_team_folders`, `list_team_notes`, `get_team_note` for notes teammates shared. Attribute them to the teammate.
 
-Skip Fluent for code, git, or files in the workspace unless the user also wants conversation context.
-
-## How to query
-
-1. If the account has multiple organizations, call `list_organizations` and `select_organization` before other tools.
-2. Recency and dates: `list_memories` (newest first). Then `get_memory` or `get_meeting_notes` for the full recording.
-3. Keyword or person search: `search_conversations`. It matches titles and participants, not full transcripts.
-4. People: `list_people` then `get_person_context`. Create or annotate with `create_person` and `update_person_notes` only when the user asks.
-5. "What's on my plate": `get_daily_briefing`, `list_tasks`, `get_recent_commitments`, `list_follow_ups`, `list_goals`.
-
-Prefer the smallest tool that answers the question. Cite the conversation or person you used.
+Prefer the smallest tool that answers the question. Cite the meeting (title and date) or person you used.
 
 ## Write actions
 
-`create_task`, `complete_task`, `create_person`, and `update_person_notes` change the user's Fluent data. Only do them when the user asked, and confirm what you wrote.
+`create_task`, `complete_task`, `create_person`, `update_person_notes` and `set_day_plan` change the user's Fluent data. Use them only when the user asks, and say what you wrote. `update_person_notes` replaces the existing notes and `set_day_plan` replaces that day's plan, so read first and confirm before overwriting. Fluent has no delete tool.
